@@ -8,4 +8,13 @@ public enum SubjectName {
     private SubjectName(String subjectNameString) {
         this.subjectNameString = subjectNameString;
     }
+
+    @Override
+    public String toString() {
+        return this.subjectNameString;
+    }
+
+    public String toStorageValue(){
+        return this.toString();
+}
 }
