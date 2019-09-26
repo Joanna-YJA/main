@@ -11,7 +11,6 @@ public abstract class AlfredException extends Exception {
         super(message, cause);
     }
 
-}
 
     public AlfredException(Exception cause) {
         super(cause);

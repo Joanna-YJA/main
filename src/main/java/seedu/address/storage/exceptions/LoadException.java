@@ -11,4 +11,4 @@ public class LoadException extends AlfredException {
     }
 
 }
-}
+
