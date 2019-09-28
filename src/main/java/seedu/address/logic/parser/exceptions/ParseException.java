@@ -4,7 +4,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 
 /**
  * Represents a parse error encountered by a parser.
- * ParseException is thrown is one of thr 4 scenario:
+ * ParseException is thrown is one of the 4 scenario:
  * 1) When the command is unknown
  * 2) When the specific operation cannot be applied on an entity(invalid entity)
  * 3) When the command format is inaccurate
