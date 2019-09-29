@@ -52,15 +52,13 @@ public class Location {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.tableNumber, this.team);
+        return Objects.hash(this.tableNumber);
     }
 
     @Override
     public boolean equals(Object other) {
         Location otherLocation = ((Location) other);
-        return otherLocation == this |
-                (otherLocation.getTeam() == this.getTeam()
-                && otherLocation.getTableNumber() == this.getTableNumber());
+        return otherLocation == this | otherLocation.getTableNumber() == this.getTableNumber();
     }
 
     /**
