@@ -7,9 +7,6 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 public class Location {
     private final int tableNumber;
-    private Team team;
-
-    public static final String MESSAGE_CONSTRAINTS_INVALID_TEAM = "Team should be an instance of Team object";
 
     public static final String MESSAGE_CONSTRAINTS_INVALID_TABLE_NUMBER = "Table number should be an integer"
             + "and adhere to the following constraints:\n"
@@ -49,42 +46,20 @@ public class Location {
         return tableNumber;
     }
 
-    public Team getTeam() {
-        return team;
-    }
 
     // Setter
 
 
-    public void setTeam(Team team) {
-        requireNonNull(team);
-        checkArgument(team instanceof  Team, MESSAGE_CONSTRAINTS_INVALID_TEAM);
-        this.team = team;
-    }
-
-    /**
-     * Constructor with team.
-     * Constructs a new {@code Location}.
-     *
-     * @param tableNumber Table that team is seated at.
-     * @param team Team that will seat at the table.
-     */
-    public Location(int tableNumber, Team team) {
-        this(tableNumber);
-       this.setTeam(team);
-    }
-
     @Override
     public int hashCode() {
-        return Objects.hash(this.tableNumber, this.team);
+        return Objects.hash(this.tableNumber);
     }
 
     @Override
     public boolean equals(Object other) {
         Location otherLocation = ((Location) other);
         return otherLocation == this |
-                (otherLocation.getTeam() == this.getTeam()
-                && otherLocation.getTableNumber() == this.getTableNumber());
+                otherLocation.getTableNumber() == this.getTableNumber();
     }
 
     /**
@@ -96,9 +71,7 @@ public class Location {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(" Table Number: ")
-                .append(getTableNumber())
-                .append(" Team: ")
-                .append(getTeam());
+                .append(getTableNumber());
         return builder.toString();
     }
 
@@ -107,7 +80,7 @@ public class Location {
      *
      * @return Location in string format.
      */
-    public String toStorageValue(){
-        return this.toString();
+    public int toStorageValue(){
+        return this.tableNumber;
     }
 }

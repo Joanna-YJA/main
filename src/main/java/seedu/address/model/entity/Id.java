@@ -7,7 +7,6 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 public class Id {
 
-    private static final String TYPE_CHARACTERS = "PDIMT";
 
     public static final String MESSAGE_CONSTRAINTS_INVALID_NUMBER = "Number should be of the format integer,"
             + "and adhere to the following constraints: \n"
@@ -15,10 +14,6 @@ public class Id {
             + "The number must: \n"
             + "    -be at least one digit long\n"
             + "    -contain only digits from 0 to 9\n";
-
-    public static final String MESSAGE_CONSTRAINTS_INVALID_PREFIX = "Prefix should adhere to the following constraints:\n"
-            + "1. The prefix is an instance of PrefixType, which can be either one of these characters, excluding parentheses,"
-            + "(" + TYPE_CHARACTERS + ") to indicate what type of entity it is. \n";
 
 
     private static final String NUMBER_REGEX = "^\\d+$";
@@ -33,7 +28,6 @@ public class Id {
      */
     public Id(PrefixType prefix, int number) {
         requireNonNull(number);
-        checkArgument(prefix instanceof PrefixType, MESSAGE_CONSTRAINTS_INVALID_PREFIX);
         checkArgument(isValidNumber(number), MESSAGE_CONSTRAINTS_INVALID_NUMBER);
         this.prefix = prefix;
         this.number = number;

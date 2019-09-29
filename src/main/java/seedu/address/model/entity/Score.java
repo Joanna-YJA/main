@@ -46,7 +46,7 @@ public class Score {
      *
      * @return Score in string format.
      */
-   public String toStorageValue(){
-    return this.toString();
+   public int toStorageValue(){
+    return this.score;
    }
 }
