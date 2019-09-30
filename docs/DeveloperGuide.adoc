@@ -279,33 +279,70 @@ Refer to the guide <<DevOps#, here>>.
 
 *Target user profile*:
 
+* Human Resource Admin In-Charge of School of Computing 'Hackathon' Event
 * has a need to manage a significant number of contacts
+* has a need to register participants in bulk
+* has a need to classify contacts into Mentor, Participants and Teams
+* has a need to keep track of which member is in which Team
+* has a need to keep track of the seating positions of each Team
+* has a need to keep track of Mentor assignments to Teams
+* has a need to keep track of the competition winners and prizes won
+* has a need to search for specific Mentor, Team or Participant at times
 * prefer desktop apps over other types
 * can type fast
 * prefers typing over mouse input
 * is reasonably comfortable using CLI apps
 
-*Value proposition*: manage contacts faster than a typical mouse/GUI driven app
+*Value proposition*:
+
+* manage contacts faster than a typical mouse/GUI driven app
+* keep track of the relationship between Participant, Team and Mentor, such that it can be referenced at times
+* store a significant number of contacts in an organised, readable manner
 
 [appendix]
 == User Stories
 
 Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (unlikely to have) - `*`
 
-[width="59%",cols="22%,<23%,<25%,<30%",options="header",]
+[width="79%",cols="15%,<20%,<35%,<37%",options="header",]
 |=======================================================================
 |Priority |As a ... |I want to ... |So that I can...
 |`* * *` |new user |see usage instructions |refer to instructions when I forget how to use the App
 
-|`* * *` |user |add a new person |
+|`* * *` |Admin In-Charge |find a Entity by name |locate details of Entity without having to go through the entire list
 
-|`* * *` |user |delete a person |remove entries that I no longer need
+|`* * *` |Admin In-Charge |delete an Entity by name |remove entries I no longer need
 
-|`* * *` |user |find a person by name |locate details of persons without having to go through the entire list
+|`* * *` |Admin In-Charge |add an Entity by name and contact information |update the list of Entities
 
-|`* *` |user |hide <<private-contact-detail,private contact details>> by default |minimize chance of someone else seeing them by accident
+|`* * *` |Admin In-Charge |updated an Entity by name and contact information |update the specific entries
 
-|`*` |user with many persons in the address book |sort persons by name |locate a person easily
+|`* * *` |Admin In-Charge |register individuals en-masse(with provided registration information) | avoid tedious manual registration
+
+|`* * *` |Admin In-Charge |keep track of winning teams and the prizes won | ensure that the prize-giving ceremony runs smoothly
+
+|`* * *` |Admin In-Charge |keep track of winning teams and the prizes won | ensure that the prize-giving ceremony runs smoothly
+
+|`* * *` |Admin In-Charge |make sure that I will be notified on any wrong commands that I type | make sure that I do not accidentally clutter up my list of entries
+
+|`* * *` |Admin In-Charge |have a readable and organised User Interface | understand the output of my commands
+
+|`* * *` |Admin In-Charge |keep track of participants who signed up late or after the event has filled up into a waitlist | manage them in case available space turns up during the Event
+
+|`* * *` |Admin In-Charge |manually match Teams to Mentor | know which Mentor is in charge of a team
+
+|`* * *` |Admin In-Charge |keep track of where each Team or Mentor is seating|usher them to their places during the actual event
+
+|`* *` |Admin In-Charge |know my sponsor's needs and arrival time | adequately cater to their needs and allocate manpower accordingly
+
+|`* *` |Admin In-Charge |keep track of inventory of swag | make sure they are adequately catered to all participants
+
+|`* *` |Admin In-Charge |keep track of amount of food or catering | make sure they are adequately catered to all participants
+
+
+|`*` |Admin In-Charge |automatically match Teams to Mentor by their expertise and project type of the Team | do not need to perform the matching manually
+
+|`*` |Admin In-Charge |schedule meetings between Teams and Mentors | lets Mentors know when to consult each Team in an organised manner
 |=======================================================================
 
 _{More to be added}_
@@ -313,17 +350,17 @@ _{More to be added}_
 [appendix]
 == Use Cases
 
-(For all use cases below, the *System* is the `AddressBook` and the *Actor* is the `user`, unless specified otherwise)
+(For all use cases below, the *System* is the `HackathonManager` and the *Actor* is the `user`, unless specified otherwise)
 
 [discrete]
-=== Use case: Delete person
+=== Use case: Delete an Entity Type(Participant, Mentor, Team)
 
 *MSS*
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1.  User requests a list of an entity type
+2.  HackathonManager shows a list of that entity type
+3.  User requests to delete a specific entity in the list by name
+4.  HackathonManager deletes the person
 +
 Use case ends.
 
@@ -334,14 +371,98 @@ Use case ends.
 +
 Use case ends.
 
-* 3a. The given index is invalid.
+* 3a. The given name is invalid.
 +
 [none]
-** 3a1. AddressBook shows an error message.
+** 3a1. HackathonManager shows an error message.
 +
 Use case resumes at step 2.
 
-_{More to be added}_
+=== Use case: Find an Entity of a specific Entity Type(Participant, Mentor, Team)
+
+*MSS*
+
+1.  User requests a find an Entity of a specific Entity Type.
+2.  HackathonManager indicates success and shows the details of the Entity.
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 1a. The Entity is not found in the list of Entities.
++
+[none]
+** 1a1. HackathonManager shows an error message.
++
+Use case ends.
+
+=== Use case: Create an Entity of a specific Entity Type(Participant, Mentor, Team)
+
+*MSS*
+
+1.  User requests to create an Entity by specifying the Entity Type and contact information.
+2.  HackathonManager indicates success and shows the details of the Entity.
++
+Use case ends.
+
+=== Use case: Update an Entity of a specific Entity Type(Participant, Mentor, Team)
+
+*MSS*
+
+1. User requests a list of an entity type
+2.  HackathonManager shows a list of that entity type
+3.  User requests to update a specific entity in the list by name or index
+4.  HackathonManager updates the person
+Use case ends.
+
+*Extensions*
+
+[none]
+* 1a. The name is not found it the list of Entities.
++
+[none]
+** 1a1. HackathonManager shows an error message.
+** 1a2. User enters new name.
+Steps 1a1-1a2 are repeated until the index or name is found in the list of Entities.
++
+Use case resumes from step 4.
++
+[none]
++
+* 1b. The index is not found it the list of Entities.
++
+[none]
+** 1a1. HackathonManager shows an error message.
+** 1a2. User enters new index.
+Steps 1a1-1a2 are repeated until the index is found in the list of Entities.
++
+Use case resumes from step 4.
+
+=== Use case: Find the top scoring Teams for each category
+
+
+=== Use case: Find the top scoring Teams for each category
+
+*MSS*
+
+1. User requests a for the top scorers of a specific category
+2.  HackathonManager shows the leaderboard of the category, with respective score of each team.
+Use case ends.
+
+*Extensions*
+
+[none]
+* 1a. The catergory is not found.
++
+[none]
+** 1a1. HackathonManager shows an error message.
+** 1a2. User enters category.
+Steps 1a1-1a2 are repeated until the category is found.
++
+Use case resumes from step 2.
+
+
 
 [appendix]
 == Non Functional Requirements
