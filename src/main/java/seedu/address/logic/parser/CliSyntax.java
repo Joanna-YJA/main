@@ -12,4 +12,12 @@ public class CliSyntax {
     public static final Prefix PREFIX_TAG = new Prefix("t/");
     public static final Prefix PREFIX_REMARK = new Prefix("r/");
 
+    /* Entity Types */
+    // Can change to enum. Just following the above convention
+    // Or maybe we can define an EntityType class?
+    public static final String ENTITY_ISSUE = "issue";
+    public static final String ENTITY_MENTOR = "mentor";
+    public static final String ENTITY_PARTICIPANT = "participant";
+    public static final String ENTITY_TEAM = "team";
+
 }
