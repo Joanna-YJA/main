@@ -94,10 +94,16 @@ public class EditCommand extends Command {
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
+<<<<<<< HEAD
         Remark updatedRemark = personToEdit.getRemark();
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedRemark, updatedTags);
+=======
+        Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedTags);
+>>>>>>> upstream/master
     }
 
     @Override
@@ -126,7 +132,10 @@ public class EditCommand extends Command {
         private Name name;
         private Phone phone;
         private Email email;
+<<<<<<< HEAD
         private Remark remark;
+=======
+>>>>>>> upstream/master
         private Set<Tag> tags;
 
         public EditPersonDescriptor() {}
@@ -139,7 +148,10 @@ public class EditCommand extends Command {
             setName(toCopy.name);
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
+<<<<<<< HEAD
             setRemark(toCopy.remark);
+=======
+>>>>>>> upstream/master
             setTags(toCopy.tags);
         }
 
@@ -176,6 +188,7 @@ public class EditCommand extends Command {
             return Optional.ofNullable(email);
         }
 
+<<<<<<< HEAD
         public void setRemark(Remark remark) {
             this.remark = remark;
         }
@@ -185,6 +198,8 @@ public class EditCommand extends Command {
         }
 
 
+=======
+>>>>>>> upstream/master
         /**
          * Sets {@code tags} to this object's {@code tags}.
          * A defensive copy of {@code tags} is used internally.

@@ -27,7 +27,10 @@ class JsonAdaptedPerson {
     private final String name;
     private final String phone;
     private final String email;
+<<<<<<< HEAD
     private final String remark;
+=======
+>>>>>>> upstream/master
     private final List<JsonAdaptedTag> tagged = new ArrayList<>();
 
     /**
@@ -35,12 +38,19 @@ class JsonAdaptedPerson {
      */
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
+<<<<<<< HEAD
             @JsonProperty("email") String email, @JsonProperty("remark") String remark,
+=======
+            @JsonProperty("email") String email,
+>>>>>>> upstream/master
             @JsonProperty("tagged") List<JsonAdaptedTag> tagged) {
         this.name = name;
         this.phone = phone;
         this.email = email;
+<<<<<<< HEAD
         this.remark = remark;
+=======
+>>>>>>> upstream/master
         if (tagged != null) {
             this.tagged.addAll(tagged);
         }
@@ -53,7 +63,10 @@ class JsonAdaptedPerson {
         name = source.getName().fullName;
         phone = source.getPhone().value;
         email = source.getEmail().value;
+<<<<<<< HEAD
         remark = source.getRemark().value;
+=======
+>>>>>>> upstream/master
         tagged.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
@@ -94,6 +107,7 @@ class JsonAdaptedPerson {
         }
         final Email modelEmail = new Email(email);
 
+<<<<<<< HEAD
         if (remark == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Remark.class.getSimpleName()));
         }
@@ -101,6 +115,10 @@ class JsonAdaptedPerson {
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
         return new Person(modelName, modelPhone, modelEmail, modelRemark, modelTags);
+=======
+        final Set<Tag> modelTags = new HashSet<>(personTags);
+        return new Person(modelName, modelPhone, modelEmail, modelTags);
+>>>>>>> upstream/master
     }
 
 }
