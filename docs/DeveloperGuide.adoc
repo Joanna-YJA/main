@@ -12,7 +12,7 @@ ifdef::env-github[]
 :note-caption: :information_source:
 :warning-caption: :warning:
 endif::[]
-:repoURL: https://github.com/AY1920S1-CS2103T-F11-1/main/tree/master
+:repoURL: https://github.com/se-edu/addressbook-level3/tree/master
 
 By: `Team Alfred`      Since: `Sept 2019`      Licence: `MIT`
 
@@ -127,7 +127,7 @@ The `Model`,
 * stores the lists of our various entities.
 * Model is the bridge between Logic and Storage and provides an abstraction of how the data is stored in memory.
 * It exposes a `ReadableEntityList` which only has the list method to remind Logic that the data given should not be modified.
-* The UI can be bound to these lists so that it automatically updates when the contents of the list change.
+- The UI can be bound to these lists so that it automatically updates when the contents of the list change.
 * The `Model` interface also serves as an API through which controller can edit the data stored in memory.
 
 
@@ -516,9 +516,9 @@ Author: ...
 
 Pros:
 
-*  This is extremely versatile as Google Sheets come with a list of extremely helpful macros that could help in the storage of participants.
-*  The display and UI of Google Sheets is extremely intuitive and will come as second nature to anyone using the web.
-*  Convenient and accessible by multiple HR personnel simultaneously.
+* This is extremely versatile as Google Sheets come with a list of extremely helpful macros that could help in the storage of participants.
+* The display and UI of Google Sheets is extremely intuitive and will come as second nature to anyone using the web.
+* Convenient and accessible by multiple HR personnel simultaneously.
 
 Cons:
 
@@ -541,8 +541,8 @@ These instructions only provide a starting point for testers to work on; testers
 . Initial launch
 
 .. Download the jar file and copy into an empty folder
-.. Double-click the jar file 
-   Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+.. Double-click the jar file +
+   Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum. +
    _Note: If you are a OS X user, you might need to run this from your command line instead._
 
 . Saving window preferences
