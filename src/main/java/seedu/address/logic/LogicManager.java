@@ -15,6 +15,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
+import seedu.address.storage.AlfredStorage;
 import seedu.address.storage.Storage;
 
 /**
@@ -25,12 +26,13 @@ public class LogicManager implements Logic {
     private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     private final Model model;
-    private final Storage storage;
+    private final AlfredStorage alfredStorage;
+    //Will this be changed to alfredParser?
     private final AddressBookParser addressBookParser;
 
-    public LogicManager(Model model, Storage storage) {
+    public LogicManager(Model model, AlfredStorage alfredStorage) {
         this.model = model;
-        this.storage = storage;
+        this.alfredStorage = alfredStorage;
         addressBookParser = new AddressBookParser();
     }
 

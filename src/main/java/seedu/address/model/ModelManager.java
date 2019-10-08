@@ -1,6 +1,9 @@
 package seedu.address.model;
 
+import java.io.IOException;
 import static java.util.Objects.requireNonNull;
+import javax.swing.RowFilter;
+import seedu.address.commons.exceptions.DataConversionException;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
@@ -21,9 +24,11 @@ import seedu.address.model.entity.Participant;
 import seedu.address.model.entity.Team;
 import seedu.address.model.entitylist.MentorList;
 import seedu.address.model.entitylist.ParticipantList;
-import seedu.address.model.entitylist.ReadableEntityList;
+import seedu.address.model.entitylist.ReadOnlyEntityList;
 import seedu.address.model.entitylist.TeamList;
 import seedu.address.model.person.Person;
+import seedu.address.model.util.SampleDataUtil;
+import seedu.address.storage.AlfredStorage;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -31,9 +36,9 @@ import seedu.address.model.person.Person;
 public class ModelManager implements Model {
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
-    private final AddressBook addressBook;
+
     private final UserPrefs userPrefs;
-    private final FilteredList<Person> filteredPersons;
+
 
     // EntityLists
     private final ParticipantList participantList;
@@ -41,25 +46,68 @@ public class ModelManager implements Model {
     private final MentorList mentorList;
 
     /**
-     * Initializes a ModelManager with the given addressBook and userPrefs.
+     * Returns a {@code ModelManager} with the data from {@code storage}'s address book and {@code userPrefs}. <br>
+     * The data from the sample address book will be used instead if {@code storage}'s address book is not found,
+     * or an empty address book will be used instead if errors occur when reading {@code storage}'s address book.
      */
-    public ModelManager(ReadOnlyAddressBook addressBook, ReadOnlyUserPrefs userPrefs) {
-        super();
-        requireAllNonNull(addressBook, userPrefs);
+    public static Model initModelManager(AlfredStorage alfredStorage, ReadOnlyUserPrefs userPrefs) throws AlfredException {
+        Optional<ParticipantList> optionalParticipantList;
+        Optional<MentorList> optionalMentorList;
+        Optional<TeamList> optionalTeamList;
 
-        logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
+        ReadOnlyEntityList participantList;
+        ReadOnlyEntityList mentorList;
+        ReadOnlyEntityList teamList;
+        try {
+            optionalParticipantList = alfredStorage.readParticipantList();
+            optionalMentorList = alfredStorage.readMentorList();
+            optionalTeamList = alfredStorage.readTeamList();
+            //If participant list is not present, sample data is used instead.
+            //System will be unable to proceed without participantList
+            if (!optionalParticipantList.isPresent() || optionalMentorList.isPresent() || optionalTeamList.isPresent()) {
+                logger.info("Data file not found. Will be starting with a sample list of entries.");
+            }
+            //TODO: Create sample entries
+            participantList = optionalParticipantList.orElseGet(SampleDataUtil::getSampleParticipantList);
+            mentorList = optionalParticipantList.orElseGet(SampleDataUtil::getSampleMentorList;
+            teamList = optionalParticipantList.orElseGet(SampleDataUtil::getSampleTeamList;
+        } catch (DataConversionException e) {
+            logger.warning("Data file not in the correct format. Will be starting with an empty list of entries.");
+            participantList = new ParticipantList();
+            mentorList = new MentorList();
+            teamList = new TeamList();
+        } catch (IOException e) {
+            logger.warning("Problem while reading from the file. Will be starting with an empty list of entries.");
+            participantList = new ParticipantList();
+            mentorList = new MentorList();
+            teamList = new TeamList();
+        }
 
-        this.addressBook = new AddressBook(addressBook);
-        this.userPrefs = new UserPrefs(userPrefs);
-        filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
-
-        this.participantList = new ParticipantList();
-        this.teamList = new TeamList();
-        this.mentorList = new MentorList();
+        return new ModelManager(participantList, mentorList, teamList, userPrefs);
     }
 
-    public ModelManager() {
-        this(new AddressBook(), new UserPrefs());
+    /**
+     * Initializes a ModelManager with the given addressBook and userPrefs.
+     */
+    private ModelManager(ReadOnlyEntityList participantList, ReadOnlyEntityList mentorList, ReadOnlyEntityList teamList, ReadOnlyUserPrefs userPrefs) throws AlfredException {
+        super();
+        requireAllNonNull(participantList, teamList, mentorList, userPrefs);
+
+        logger.fine("Initializing with Participant List: " + participantList
+                logger.fine("Initializing with Mentor List" + mentorList);
+        logger.fine("Initializing with Team List: " + teamList);
+        logger.fine("Initializing with UserPrefs: " + userPrefs);
+
+
+        this.userPrefs = new UserPrefs(userPrefs);
+
+        this.participantList = addAllParticipants(new ParticipantList(), participantList);
+        this.teamList = addAllTeams(new TeamList(), teamList);
+        this.mentorList = addAllMentors(new MentorList, mentorList);
+    }
+
+    public ModelManager() throws AlfredException {
+        this(new ParticipantList(), new MentorList(), new TeamList(), new UserPrefs());
     }
 
     //=========== UserPrefs ==================================================================================
@@ -99,12 +147,44 @@ public class ModelManager implements Model {
 
     //========== EntityListMethods ===============
 
+    //Tried to use streams, but streams cannot throw checked exceptions
+    public ParticipantList addAllParticipants(ParticipantList currList, ReadOnlyEntityList newList) throws AlfredException {
+
+        List newParticipantList = newList.list();
+        for(int i = 0; i < newParticipantList.size(); i++){
+            currList.add((Participant)newParticipantList.get(i));
+        }
+
+        return currList;
+    }
+
+    public TeamList addAllTeams(TeamList currList, ReadOnlyEntityList newList) throws AlfredException {
+
+        List newTeamList = newList.list();
+        for(int i = 0; i < newTeamList.size(); i++){
+            currList.add((Team)newTeamList.get(i));
+        }
+        return currList;
+    }
+
+
+    public MentorList addAllMentors(MentorList currList, ReadOnlyEntityList newList) throws AlfredException {
+
+        List newTeamList = newList.list();
+        for(int i = 0; i < newTeamList.size(); i++){
+            currList.add((Mentor)newTeamList.get(i));
+        }
+        return currList;
+    }
+
+
+
     /**
      * Returns the participant list located in the Model Manager.
      *
      * @return ReadableEntityList
      */
-    public ReadableEntityList getParticipantList() {
+    public ReadOnlyEntityList getParticipantList() {
         return this.participantList;
     }
 
@@ -113,7 +193,7 @@ public class ModelManager implements Model {
      *
      * @return ReadableEntityList
      */
-    public ReadableEntityList getTeamList() {
+    public ReadOnlyEntityList getTeamList() {
         return this.teamList;
     }
 
@@ -122,7 +202,7 @@ public class ModelManager implements Model {
      *
      * @return ReadableEntityList
      */
-    public ReadableEntityList getMentorList() {
+    public ReadOnlyEntityList getMentorList() {
         return this.mentorList;
     }
 
@@ -194,8 +274,8 @@ public class ModelManager implements Model {
      */
     public Team getTeamByParticipantId(Id participantId) throws AlfredException {
         List<Team> teams = this.teamList.getSpecificTypedList();
-        for (Team t: teams) {
-            for (Participant p: t.getParticipants()) {
+        for (Team t : teams) {
+            for (Participant p : t.getParticipants()) {
                 if (p.getId() == participantId) {
                     return t;
                 }
@@ -213,7 +293,7 @@ public class ModelManager implements Model {
      */
     public Team getTeamByMentorId(Id mentorId) throws AlfredException {
         List<Team> teams = this.teamList.getSpecificTypedList();
-        for (Team t: teams) {
+        for (Team t : teams) {
             Optional<Mentor> mentor = t.getMentor();
             if (mentor.isPresent()) {
                 if (mentor.get().getId() == mentorId) {
@@ -301,59 +381,9 @@ public class ModelManager implements Model {
         return this.mentorList.delete(id);
     }
 
-    //=========== AddressBook ================================================================================
-
-    @Override
-    public void setAddressBook(ReadOnlyAddressBook addressBook) {
-        this.addressBook.resetData(addressBook);
-    }
-
-    @Override
-    public ReadOnlyAddressBook getAddressBook() {
-        return addressBook;
-    }
-
-    @Override
-    public boolean hasPerson(Person person) {
-        requireNonNull(person);
-        return addressBook.hasPerson(person);
-    }
-
-    @Override
-    public void deletePerson(Person target) {
-        addressBook.removePerson(target);
-    }
-
-    @Override
-    public void addPerson(Person person) {
-        addressBook.addPerson(person);
-        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-    }
-
-    @Override
-    public void setPerson(Person target, Person editedPerson) {
-        requireAllNonNull(target, editedPerson);
-
-        addressBook.setPerson(target, editedPerson);
-    }
 
 
-    // =========== Filtered Person List Accessors =============================================================
 
-    /**
-     * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
-     * {@code versionedAddressBook}
-     */
-    @Override
-    public ObservableList<Person> getFilteredPersonList() {
-        return filteredPersons;
-    }
-
-    @Override
-    public void updateFilteredPersonList(Predicate<Person> predicate) {
-        requireNonNull(predicate);
-        filteredPersons.setPredicate(predicate);
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -369,8 +399,10 @@ public class ModelManager implements Model {
 
         // state check
         ModelManager other = (ModelManager) obj;
-        return addressBook.equals(other.addressBook)
-                && userPrefs.equals(other.userPrefs)
-                && filteredPersons.equals(other.filteredPersons);
+        return  userPrefs.equals(other.userPrefs)
+                && participantList.equals(other.participantList)
+                && teamList.equals(other.teamList)
+                && mentorList.equals(other.mentorList);
+
     }
 }

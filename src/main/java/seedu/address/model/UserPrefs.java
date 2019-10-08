@@ -17,7 +17,6 @@ public class UserPrefs implements ReadOnlyUserPrefs {
     private Path addressBookFilePath = Paths.get("data" , "addressbook.json");
     private Path teamListFilePath = Paths.get("data" , "teamlist.json");
     private Path participantListFilePath = Paths.get("data" , "participantlist.json");
-    private Path issueListFilePath = Paths.get("data" , "issuelist.json");
     private Path mentorListFilePath = Paths.get("data" , "mentorlist.json");
 
     /**
@@ -68,10 +67,6 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         return mentorListFilePath;
     }
 
-    public Path getIssueListFilePath() {
-        return issueListFilePath;
-    }
-
     public void setTeamListFilePath(Path teamListFilePath) {
         requireNonNull(teamListFilePath);
         this.teamListFilePath = teamListFilePath;
@@ -87,10 +82,6 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         this.mentorListFilePath = mentorListFilePath;
     }
 
-    public void setIssueListFilePath(Path issueListFilePath) {
-        requireNonNull(issueListFilePath);
-        this.issueListFilePath = issueListFilePath;
-    }
 
     //TODO: Remove this method after integration
     public void setAddressBookFilePath(Path addressBookFilePath) {

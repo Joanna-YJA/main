@@ -8,7 +8,7 @@ public class AlfredRuntimeException extends RuntimeException {
 
     /** Constructs an instance of {@code AlfredRuntimeException}.
      *
-     * @paraa message should contain relevant information on the cause of runtime exception.
+     * @param message should contain relevant information on the cause of runtime exception.
      */
     public AlfredRuntimeException(String message) {
         super(message);

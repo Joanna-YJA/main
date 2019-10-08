@@ -21,12 +21,20 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.entitylist.MentorList;
 import seedu.address.model.util.SampleDataUtil;
-import seedu.address.storage.AddressBookStorage;
+import seedu.address.storage.AlfredStorage;
+import seedu.address.storage.AlfredStorageManager;
 import seedu.address.storage.JsonAddressBookStorage;
+import seedu.address.storage.JsonMentorListStorage;
+import seedu.address.storage.JsonParticipantListStorage;
+import seedu.address.storage.JsonTeamListStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
+import seedu.address.storage.MentorListStorage;
+import seedu.address.storage.ParticipantListStorage;
 import seedu.address.storage.Storage;
 import seedu.address.storage.StorageManager;
+import seedu.address.storage.TeamListStorage;
 import seedu.address.storage.UserPrefsStorage;
 import seedu.address.ui.Ui;
 import seedu.address.ui.UiManager;
@@ -42,7 +50,7 @@ public class MainApp extends Application {
 
     protected Ui ui;
     protected Logic logic;
-    protected Storage storage;
+    protected AlfredStorage alfredStorage;
     protected Model model;
     protected Config config;
 
@@ -54,45 +62,32 @@ public class MainApp extends Application {
         AppParameters appParameters = AppParameters.parse(getParameters());
         config = initConfig(appParameters.getConfigPath());
 
+        //Initialise UserPrefs
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
-        //TODO: Update this with the 4 different EntityLists
-        AddressBookStorage addressBookStorage = new JsonAddressBookStorage(userPrefs.getAddressBookFilePath());
-        storage = new StorageManager(addressBookStorage, userPrefsStorage);
 
-        initLogging(config);
 
-        model = initModelManager(storage, userPrefs);
+        //Initialise EntityList Storage and AlfredStorage
+        ParticipantListStorage participantListStorage = new JsonParticipantListStorage(userPrefs.getParticipantListFilePath());
+        MentorListStorage mentorListStorage = new JsonMentorListStorage(userPrefs.getMentorListFilePath());
+        TeamListStorage teamListStorage = new JsonTeamListStorage(userPrefs.getTeamListFilePath();
+         alfredStorage = new AlfredStorageManager(participantListStorage, mentorListStorage, teamListStorage, userPrefsStorage);
 
-        logic = new LogicManager(model, storage);
+         initLogging(config);
+
+        model = initModelManager(alfredStorage, userPrefs);
+
+        logic = new LogicManager(model, alfredStorage);
 
         ui = new UiManager(logic);
     }
 
-    /**
-     * Returns a {@code ModelManager} with the data from {@code storage}'s address book and {@code userPrefs}. <br>
-     * The data from the sample address book will be used instead if {@code storage}'s address book is not found,
-     * or an empty address book will be used instead if errors occur when reading {@code storage}'s address book.
-     */
-    private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
-        Optional<ReadOnlyAddressBook> addressBookOptional;
-        ReadOnlyAddressBook initialData;
-        try {
-            addressBookOptional = storage.readAddressBook();
-            if (!addressBookOptional.isPresent()) {
-                logger.info("Data file not found. Will be starting with a sample AddressBook");
-            }
-            initialData = addressBookOptional.orElseGet(SampleDataUtil::getSampleAddressBook);
-        } catch (DataConversionException e) {
-            logger.warning("Data file not in the correct format. Will be starting with an empty AddressBook");
-            initialData = new AddressBook();
-        } catch (IOException e) {
-            logger.warning("Problem while reading from the file. Will be starting with an empty AddressBook");
-            initialData = new AddressBook();
-        }
-
-        return new ModelManager(initialData, userPrefs);
+    //Feels like Single responsibility principle is violated if i moved the initialisation phase over to ModelManager?
+    protected Model initModelManager(AlfredStorage alfredStorage, UserPrefs userPrefs) throws AlfredException{
+        return ModelManager.initModelManager(alfredStorage, userPrefs);
     }
+
+
 
     private void initLogging(Config config) {
         LogsCenter.init(config);
@@ -176,7 +171,7 @@ public class MainApp extends Application {
     public void stop() {
         logger.info("============================ [ Stopping Address Book ] =============================");
         try {
-            storage.saveUserPrefs(model.getUserPrefs());
+            alfredStorage.saveUserPrefs(model.getUserPrefs());
         } catch (IOException e) {
             logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
         }
