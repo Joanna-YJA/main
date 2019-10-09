@@ -2,6 +2,7 @@ package seedu.address.logic;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
@@ -14,6 +15,7 @@ import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.entitylist.ReadOnlyEntityList;
 import seedu.address.model.person.Person;
 import seedu.address.storage.AlfredStorage;
 import seedu.address.storage.Storage;
@@ -59,8 +61,18 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public ObservableList<Person> getFilteredPersonList() {
-        return model.getFilteredPersonList();
+    public ReadOnlyEntityList getFilteredParticipantList() {
+        return model.getParticipantList();
+    }
+
+    @Override
+    public ReadOnlyEntityList getFilteredMentorList() {
+        return model.getMentorList();
+    }
+
+    @Override
+    public ReadOnlyEntityList getFilteredTeamList() {
+        return model.getTeamList();
     }
 
     @Override

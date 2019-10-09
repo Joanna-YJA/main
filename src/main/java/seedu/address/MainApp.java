@@ -82,7 +82,7 @@ public class MainApp extends Application {
         ui = new UiManager(logic);
     }
 
-    //Feels like Single responsibility principle is violated if i moved the initialisation phase over to ModelManager?
+    //Feels like Single responsibility principle is violated if I moved the initialisation phase over to ModelManager?
     protected Model initModelManager(AlfredStorage alfredStorage, UserPrefs userPrefs) throws AlfredException{
         return ModelManager.initModelManager(alfredStorage, userPrefs);
     }
